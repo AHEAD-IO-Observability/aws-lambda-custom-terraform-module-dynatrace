@@ -1,0 +1,18 @@
+# Proprietary / internal AHEAD material — never publish
+*.docx
+
+# OS
+.DS_Store
+
+# Terraform working state
+.terraform/
+.terraform.tfstate.lock.info
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Example build artifacts and real var files (keep *.tfvars.example)
+build/
+*.tfvars
+!*.tfvars.example

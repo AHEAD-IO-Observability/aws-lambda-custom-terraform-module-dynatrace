@@ -1,0 +1,28 @@
+# Copy to terraform.tfvars and fill in. All values come from the Dynatrace Hub
+# AWS Lambda deployment wizard (or the Deployment API).
+
+aws_region    = "us-east-1"
+function_name = "dynatrace-instrumented-demo"
+runtime       = "python3.13"
+
+# WITH-collector layer variant; region + runtime + arch specific; account 585768157899.
+dynatrace_layer_arn = "arn:aws:lambda:us-east-1:585768157899:layer:Dynatrace_OneAgent_1_339_55_20260615-110349_with_collector_python_x86:1"
+
+# Connection identity from the wizard (no secrets here).
+dt_tenant              = "abc12345"
+dt_cluster             = "490143432"
+dt_connection_base_url = "https://abc12345.live.dynatrace.com"
+
+# Optional: log-ingest token (logs.ingest scope) — required by the with-collector
+# layer to fully start its collector. Omit for trace-only with a without-collector layer.
+# log_collection_auth_token = "dt0c01...."
+
+# Lab: delete the secret immediately on destroy. Use 7-30 in production.
+auth_token_secret_recovery_window_in_days = 0
+
+# NOTE: the connection (trace) token is NOT set here. The module creates an empty
+# Secrets Manager secret; write the plaintext token (openTelemetryTrace.ingest scope)
+# into it out-of-band, e.g.:
+#   aws secretsmanager put-secret-value \
+#     --secret-id "$(terraform output -raw connection_auth_token_secret_arn)" \
+#     --secret-string 'dt0c01....'
